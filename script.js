@@ -85,7 +85,8 @@ const personagens = [
       east: [
         'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
       ]
-    }
+    },
+    unico: true
   },
   {
     nome: 'whastelander',
@@ -94,7 +95,8 @@ const personagens = [
       east: [
         'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png', 'frame_006.png', 'frame_007.png'
       ]
-    }
+    },
+    unico: true
   },
   {
     nome: 'zombie',
@@ -103,7 +105,28 @@ const personagens = [
       east: [
         'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
       ]
-    }
+    },
+    unico: false
+  },
+  {
+    nome: 'zombie2',
+    pasta: 'animations/zombie2/animations/walking-3',
+    frames: {
+      east: [
+        'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
+      ]
+    },
+    unico: false
+  },
+  {
+    nome: 'zombie3',
+    pasta: 'animations/zombie3/animations/walking-5',
+    frames: {
+      east: [
+        'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png'
+      ]
+    },
+    unico: false
   },
   {
     nome: 'nelson',
@@ -112,7 +135,8 @@ const personagens = [
       east: [
         'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
       ]
-    }
+    },
+    unico: true
   },
   {
     nome: 'madruga',
@@ -121,7 +145,8 @@ const personagens = [
       east: [
         'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
       ]
-    }
+    },
+    unico: true
   }
 ];
 
@@ -141,7 +166,7 @@ if (!containerPersonagens) {
   document.querySelector('.wallpaper').appendChild(containerPersonagens);
 }
 
-// Controle de instância única para Dalmatian, whastelander, nelson e madruga
+// Controle de instância única para personagens únicos
 let dalmatianNaTela = false;
 let whastelanderNaTela = false;
 let nelsonNaTela = false;
@@ -153,10 +178,12 @@ function spawnPersonagem() {
   // Escolhe personagem e direção aleatória
   const personagem = personagens[Math.floor(Math.random() * personagens.length)];
   // Controle de instância única para Dalmatian e whastelander
-  if (personagem.nome === 'Dalmatian' && dalmatianNaTela) return;
-  if (personagem.nome === 'whastelander' && whastelanderNaTela) return;
-  if (personagem.nome === 'nelson' && nelsonNaTela) return;
-  if (personagem.nome === 'madruga' && madrugaNaTela) return;
+  if (personagem.unico) {
+    if (personagem.nome === 'Dalmatian' && dalmatianNaTela) return;
+    if (personagem.nome === 'whastelander' && whastelanderNaTela) return;
+    if (personagem.nome === 'nelson' && nelsonNaTela) return;
+    if (personagem.nome === 'madruga' && madrugaNaTela) return;
+  }
 
   const direcao = 'east'; // só há frames east disponíveis
   const frames = personagem.frames[direcao];
@@ -180,10 +207,12 @@ function spawnPersonagem() {
   containerPersonagens.appendChild(el);
 
   // Marca personagem na tela
-  if (personagem.nome === 'Dalmatian') dalmatianNaTela = true;
-  if (personagem.nome === 'whastelander') whastelanderNaTela = true;
-  if (personagem.nome === 'nelson') nelsonNaTela = true;
-  if (personagem.nome === 'madruga') madrugaNaTela = true;
+  if (personagem.unico) {
+    if (personagem.nome === 'Dalmatian') dalmatianNaTela = true;
+    if (personagem.nome === 'whastelander') whastelanderNaTela = true;
+    if (personagem.nome === 'nelson') nelsonNaTela = true;
+    if (personagem.nome === 'madruga') madrugaNaTela = true;
+  }
 
   // Animação de movimento e troca de frames
   let x = startX;
@@ -200,10 +229,12 @@ function spawnPersonagem() {
     } else {
       el.remove();
       // Libera instância única
-      if (personagem.nome === 'Dalmatian') dalmatianNaTela = false;
-      if (personagem.nome === 'whastelander') whastelanderNaTela = false;
-      if (personagem.nome === 'nelson') nelsonNaTela = false;
-      if (personagem.nome === 'madruga') madrugaNaTela = false;
+      if (personagem.unico) {
+        if (personagem.nome === 'Dalmatian') dalmatianNaTela = false;
+        if (personagem.nome === 'whastelander') whastelanderNaTela = false;
+        if (personagem.nome === 'nelson') nelsonNaTela = false;
+        if (personagem.nome === 'madruga') madrugaNaTela = false;
+      }
     }
   }
   mover();
