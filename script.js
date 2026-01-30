@@ -104,6 +104,24 @@ const personagens = [
         'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
       ]
     }
+  },
+  {
+    nome: 'nelson',
+    pasta: 'animations/nelson/animations/running-6-frames',
+    frames: {
+      east: [
+        'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
+      ]
+    }
+  },
+  {
+    nome: 'madruga',
+    pasta: 'animations/madruga/animations/walk-6-frames',
+    frames: {
+      east: [
+        'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
+      ]
+    }
   }
 ];
 
@@ -123,9 +141,11 @@ if (!containerPersonagens) {
   document.querySelector('.wallpaper').appendChild(containerPersonagens);
 }
 
-// Controle de instância única para Dalmatian e whastelander
+// Controle de instância única para Dalmatian, whastelander, nelson e madruga
 let dalmatianNaTela = false;
 let whastelanderNaTela = false;
+let nelsonNaTela = false;
+let madrugaNaTela = false;
 
 
 
@@ -135,6 +155,8 @@ function spawnPersonagem() {
   // Controle de instância única para Dalmatian e whastelander
   if (personagem.nome === 'Dalmatian' && dalmatianNaTela) return;
   if (personagem.nome === 'whastelander' && whastelanderNaTela) return;
+  if (personagem.nome === 'nelson' && nelsonNaTela) return;
+  if (personagem.nome === 'madruga' && madrugaNaTela) return;
 
   const direcao = 'east'; // só há frames east disponíveis
   const frames = personagem.frames[direcao];
@@ -160,6 +182,8 @@ function spawnPersonagem() {
   // Marca personagem na tela
   if (personagem.nome === 'Dalmatian') dalmatianNaTela = true;
   if (personagem.nome === 'whastelander') whastelanderNaTela = true;
+  if (personagem.nome === 'nelson') nelsonNaTela = true;
+  if (personagem.nome === 'madruga') madrugaNaTela = true;
 
   // Animação de movimento e troca de frames
   let x = startX;
@@ -178,6 +202,8 @@ function spawnPersonagem() {
       // Libera instância única
       if (personagem.nome === 'Dalmatian') dalmatianNaTela = false;
       if (personagem.nome === 'whastelander') whastelanderNaTela = false;
+      if (personagem.nome === 'nelson') nelsonNaTela = false;
+      if (personagem.nome === 'madruga') madrugaNaTela = false;
     }
   }
   mover();
