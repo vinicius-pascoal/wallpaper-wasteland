@@ -74,6 +74,121 @@ function desenhaLua() {
   });
 }
 
+
+// Personagens disponíveis e suas animações
+
+const personagens = [
+  {
+    nome: 'Dalmatian',
+    pasta: 'animations/Dalmatian/animations/running-6-frames',
+    frames: {
+      east: [
+        'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
+      ]
+    }
+  },
+  {
+    nome: 'whastelander',
+    pasta: 'animations/whastelander/animations/scary-walk',
+    frames: {
+      east: [
+        'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png', 'frame_006.png', 'frame_007.png'
+      ]
+    }
+  },
+  {
+    nome: 'zombie',
+    pasta: 'animations/zombie/animations/walking',
+    frames: {
+      east: [
+        'frame_000.png', 'frame_001.png', 'frame_002.png', 'frame_003.png', 'frame_004.png', 'frame_005.png'
+      ]
+    }
+  }
+];
+
+// Container para personagens animados
+
+let containerPersonagens = document.getElementById('personagens-container');
+if (!containerPersonagens) {
+  containerPersonagens = document.createElement('div');
+  containerPersonagens.id = 'personagens-container';
+  containerPersonagens.style.position = 'absolute';
+  containerPersonagens.style.top = '0';
+  containerPersonagens.style.left = '0';
+  containerPersonagens.style.width = '100vw';
+  containerPersonagens.style.height = '100vh';
+  containerPersonagens.style.pointerEvents = 'none';
+  containerPersonagens.style.zIndex = '20';
+  document.querySelector('.wallpaper').appendChild(containerPersonagens);
+}
+
+// Controle de instância única para Dalmatian e whastelander
+let dalmatianNaTela = false;
+let whastelanderNaTela = false;
+
+
+
+function spawnPersonagem() {
+  // Escolhe personagem e direção aleatória
+  const personagem = personagens[Math.floor(Math.random() * personagens.length)];
+  // Controle de instância única para Dalmatian e whastelander
+  if (personagem.nome === 'Dalmatian' && dalmatianNaTela) return;
+  if (personagem.nome === 'whastelander' && whastelanderNaTela) return;
+
+  const direcao = 'east'; // só há frames east disponíveis
+  const frames = personagem.frames[direcao];
+  const pasta = `${personagem.pasta}/${direcao}`;
+  // Posição inicial e final (1/3 inferior da tela)
+  const minY = window.innerHeight * (2 / 3);
+  const maxY = window.innerHeight * (0.95);
+  const y = Math.random() * (maxY - minY) + minY;
+  const startX = direcao === 'east' ? -120 : window.innerWidth + 120;
+  const endX = direcao === 'east' ? window.innerWidth + 120 : -120;
+  // Cria elemento
+  const el = document.createElement('img');
+  el.src = `${pasta}/${frames[0]}`;
+  el.style.position = 'absolute';
+  el.style.top = `${y}px`;
+  el.style.left = `${startX}px`;
+  el.style.height = '120px';
+  el.style.width = 'auto';
+  el.style.zIndex = '21';
+  el.style.pointerEvents = 'none';
+  containerPersonagens.appendChild(el);
+
+  // Marca personagem na tela
+  if (personagem.nome === 'Dalmatian') dalmatianNaTela = true;
+  if (personagem.nome === 'whastelander') whastelanderNaTela = true;
+
+  // Animação de movimento e troca de frames
+  let x = startX;
+  const velocidade = 2 + Math.random() * 2; // px/frame
+  let frameIdx = 0;
+  function mover() {
+    if ((direcao === 'east' && x < endX) || (direcao === 'west' && x > endX)) {
+      x += direcao === 'east' ? velocidade : -velocidade;
+      el.style.left = `${x}px`;
+      // Troca de frame para animação suave
+      frameIdx = (frameIdx + 1) % frames.length;
+      el.src = `${pasta}/${frames[frameIdx]}`;
+      setTimeout(() => requestAnimationFrame(mover), 80); // ~12fps
+    } else {
+      el.remove();
+      // Libera instância única
+      if (personagem.nome === 'Dalmatian') dalmatianNaTela = false;
+      if (personagem.nome === 'whastelander') whastelanderNaTela = false;
+    }
+  }
+  mover();
+}
+
+// Spawner de personagens aleatórios
+setInterval(() => {
+  // 50% de chance de spawnar um personagem a cada 2s
+  if (Math.random() < 0.5) spawnPersonagem();
+}, 2000);
+
 function animar() {
   desenhaCeuNoturno();
   desenhaLua();
