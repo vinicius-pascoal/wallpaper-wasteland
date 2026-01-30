@@ -31,31 +31,47 @@ function desenhaCeuNoturno() {
 }
 
 // Desenhar a lua (8bit)
+
 function desenhaLua() {
-  // Posição e tamanho da lua
+  // Animação: flutuação e brilho
+  const tempo = Date.now() * 0.001;
   const x = w * 0.8;
-  const y = h * 0.18;
+  // Flutuação vertical suave
+  const y = h * 0.18 + Math.sin(tempo) * 10;
   const raio = 60;
+  // Brilho pulsante
+  const brilho = 30 + 10 * Math.abs(Math.sin(tempo * 0.7));
+  const alpha = 0.85 + 0.1 * Math.abs(Math.sin(tempo * 0.7));
+
   // Lua cheia
   ctx.save();
   ctx.beginPath();
   ctx.arc(x, y, raio, 0, 2 * Math.PI);
   ctx.fillStyle = '#f8f8e8';
   ctx.shadowColor = '#fffbe6';
-  ctx.shadowBlur = 30;
-  ctx.globalAlpha = 0.95;
+  ctx.shadowBlur = brilho;
+  ctx.globalAlpha = alpha;
   ctx.fill();
   ctx.restore();
-  // Crateras (estilo pixel)
-  for (let i = 0; i < 6; i++) {
+
+  // Crateras (estilo pixel, fixas para não "tremerem")
+  const crateras = [
+    { dx: -20, dy: -10, r: 8 },
+    { dx: 15, dy: 5, r: 6 },
+    { dx: 10, dy: -18, r: 5 },
+    { dx: -8, dy: 18, r: 4 },
+    { dx: 22, dy: -8, r: 7 },
+    { dx: -15, dy: 15, r: 5 }
+  ];
+  crateras.forEach(c => {
     ctx.save();
     ctx.beginPath();
-    ctx.arc(x + Math.random() * raio * 0.8 - raio * 0.4, y + Math.random() * raio * 0.8 - raio * 0.4, Math.random() * 7 + 3, 0, 2 * Math.PI);
+    ctx.arc(x + c.dx, y + c.dy, c.r, 0, 2 * Math.PI);
     ctx.fillStyle = '#e0e0c0';
-    ctx.globalAlpha = 0.3;
+    ctx.globalAlpha = 0.25;
     ctx.fill();
     ctx.restore();
-  }
+  });
 }
 
 function animar() {
