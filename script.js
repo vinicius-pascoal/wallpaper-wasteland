@@ -1,3 +1,21 @@
+// Relógio 8bit
+function atualizarRelogio8bit() {
+  const clock = document.getElementById('clock-8bit');
+  if (!clock) return;
+  const horaEl = clock.querySelector('.clock-hora');
+  const diaEl = clock.querySelector('.clock-dia');
+  const agora = new Date();
+  const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const dia = dias[agora.getDay()];
+  const data = agora.toLocaleDateString('pt-BR');
+  const hora = agora.getHours().toString().padStart(2, '0');
+  const min = agora.getMinutes().toString().padStart(2, '0');
+  const seg = agora.getSeconds().toString().padStart(2, '0');
+  if (horaEl) horaEl.textContent = `${hora}:${min}:${seg}`;
+  if (diaEl) diaEl.textContent = `${dia} ${data}`;
+}
+setInterval(atualizarRelogio8bit, 500);
+atualizarRelogio8bit();
 // Animação de céu noturno 8bit (estrelas piscando)
 const canvas = document.getElementById('ceu-noturno');
 const ctx = canvas.getContext('2d');
